@@ -14,10 +14,21 @@
    ".svn" :subversion})
 
 ;TODO: 
-(def vc-options
-  {:git       "log --all -M -C --numstat --date=short --pretty=format:'--%h--%cd--%cn'"
-   :mercurial "log --template 'rev: {rev} author: {author} date: {date|shortdate} files:\n{files %'{file}\n'}\n' --date '>YYYY-MM-DD"
-   :subversion "log -v --xml > logfile.log -r {YYYYmmDD}:HEAD"})
+(def vc-config
+  {:git       {:cmd "git"
+               :options "log --all -M -C --numstat --date=short --pretty=format:'--%h--%cd--%cn'"}
+   :mercurial {:cmd "hg"
+               :options "log --template 'rev: {rev} author: {author} date: {date|shortdate} files:\n{files %'{file}\n'}\n' --date '>YYYY-MM-DD"}
+   :subversion {:cmd "svn"
+                :options "log -v --xml > logfile.log -r {YYYYmmDD}:HEAD"}})
+
+(defn get-log
+  [path]
+  (let [vc-used (detect-vc-type path)
+        vc-conf (vc-used vc-config)
+        cmd (:cmd vc-conf)]
+    (with-programs [cmd]
+      (cmd (:options vc-conf)))))
 
 
 (defn- detect
