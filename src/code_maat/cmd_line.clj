@@ -34,6 +34,7 @@
    ["-t" "--temporal-period TEMPORAL-PERIOD"
     "Instructs Code Maat to consider all commits during the same day as a single, logical commit"]
    ["-d" "--age-time-now AGE-TIME_NOW" "Specify a date as YYYY-MM-dd that counts as time zero when doing a code age analysis"]
+   ["-A" "--auto-detect"]
    ["-h" "--help"]])
 
 (defn- usage [options-summary]

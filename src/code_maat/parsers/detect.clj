@@ -22,15 +22,6 @@
    :subversion {:cmd "svn"
                 :options "log -v --xml > logfile.log -r {YYYYmmDD}:HEAD"}})
 
-(defn get-log
-  [path]
-  (let [vc-used (detect-vc-type path)
-        vc-conf (vc-used vc-config)
-        cmd (:cmd vc-conf)]
-    (with-programs [cmd]
-      (cmd (:options vc-conf)))))
-
-
 (defn- detect
   [path flag]
   (let [fullpath (str path "/" flag)] ;TODO: clearly not sufficiently smart
@@ -50,3 +41,11 @@
       (= 0 res-size) (print "Error nothing found!")
       (> res-size 2) (print "Too many found")
       :else (first non-nils))))
+
+(defn get-log
+  [path]
+  (let [vc-used (detect-vc-type path)
+        vc-conf (vc-used vc-config)
+        cmd (:cmd vc-conf)]
+    (with-programs [cmd]
+      (cmd (:options vc-conf)))))
